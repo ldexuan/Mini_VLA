@@ -1,0 +1,47 @@
+# ========== 模型配置 ==========
+model_name_or_path: /home/ldx/project/MyVLA/models/Qwen2-VL-2B-Instruct   #模型路径
+template: qwen2_vl                                                        #对话模式格式
+
+# ========== 数据配置 ==========
+dataset_dir: /home/ldx/project/MyVLA/data #数据文件夹路径
+dataset: nuscenes_mini                    #具体使用哪个数据集
+cutoff_len: 4096                          #最大序列长度 超过这个会被截断
+val_size: 0.01                            #测试集比例
+
+# ========== LoRA 配置 ==========
+finetuning_type: lora                     #微调类型
+lora_rank: 16                             #控制LoRA矩阵的维度
+lora_alpha: 32                            #控制LoRA的影响强度   output = input @ (W + 2.0 * A @ B) 越小越温柔 越大越激进可能不稳定
+lora_target: all                          #transformer的7个线性层 所有7个位置都加LoRA 7*28
+lora_dropout: 0.05                        #训练时候防止正则化的手段 随机舍弃%5的连接 [1, 1, 0, 1, 1, 1, 0, 1, ...]
+
+# ========== 训练配置 ==========
+stage: sft                                       #监督微调阶段Supervised Fine-Tuning  还可是 pt sft rm ppo dpo 
+do_train: true                                   #false 只评估
+output_dir: /home/ldx/project/MyVLA/checkpoints  #输出位置
+overwrite_output_dir: true                       #覆盖已有文件 
+
+# ========== 训练参数 ==========
+num_train_epochs: 10.0                    #10轮
+per_device_train_batch_size: 1           #gpu单次1个样本
+gradient_accumulation_steps: 4           #累计4步梯度更新一次权重
+learning_rate: 3.0e-05                   #学习率
+lr_scheduler_type: cosine                #余xuan衰减
+warmup_ratio: 0.03                       #前3%用于warmup(预热)
+
+# ========== 优化配置 ==========
+bf16: true                               #混合精度Brain Floating Point 16 指数位少 容易
+ddp_timeout: 180000000                   #Distributed Data Parallel分布式数据并行 多卡训练同步梯度最高等待时间 单卡没什么用
+
+# ========== 日志配置 ==========
+logging_steps: 10                        #每10步打印一次日志 loss、学习率、训练速度
+save_steps: 100                          #每100步保存一次checkpoint
+plot_loss: true                          #训练结束后自动画loss曲线图
+
+# ========== 评估配置 ==========
+eval_strategy: 'no'                      #不做评估
+per_device_eval_batch_size: 1            #评估时的batch size
+
+# ========== 其他 ==========
+preprocessing_num_workers: 8             #用8个CPU进程并行加载数据
+overwrite_cache: true                    #忽略缓存，重新处理

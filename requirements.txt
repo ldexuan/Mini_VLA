@@ -1,0 +1,31 @@
+# MyVLA 项目依赖
+# Python 3.8+ required
+
+# ========== 深度学习框架 ==========
+# 注意: PyTorch 需要单独安装，请先运行:
+# pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+
+# ========== Transformers 和 LoRA ==========
+transformers>=4.40.0
+accelerate>=0.20.0
+peft>=0.10.0
+
+# ========== Qwen2-VL 相关 ==========
+qwen-vl-utils
+
+# ========== 训练框架 ==========
+llamafactory
+
+# ========== nuScenes 数据处理 ==========
+nuscenes-devkit
+pyquaternion
+
+# ========== 图像处理和可视化 ==========
+opencv-python
+Pillow
+
+# ========== 数据处理工具 ==========
+numpy
+tqdm
+scipy
+matplotlib

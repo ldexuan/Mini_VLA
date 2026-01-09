@@ -16,13 +16,14 @@ from nuscenes import NuScenes
 BASE_MODEL = "/home/ldx/project/MyVLA/models/Qwen2-VL-2B-Instruct"
 LORA_WEIGHTS = "/home/ldx/project/MyVLA/checkpoints"
 DATA_FILE = "/home/ldx/project/MyVLA/data/nuscenes_mini.json"
-DATAROOT = "/home/ldx/project/MyVLA/data/nuscenes/"
+NUSCENES_DATAROOT = "/home/ldx/project/MyVLA/data/nuscenes/"  # nuScenes数据根目录
+IMAGE_ROOT = "/home/ldx/project/MyVLA/"  # 图像路径根目录（用于拼接JSON中的相对路径）
 OUTPUT_DIR = "/home/ldx/project/MyVLA/output_vis/"
 VERSION = "v1.0-mini"
 
 # ========== 加载 nuScenes（用于相机参数） ==========
 print("Loading nuScenes...")
-nusc = NuScenes(version=VERSION, dataroot=DATAROOT, verbose=False)
+nusc = NuScenes(version=VERSION, dataroot=NUSCENES_DATAROOT, verbose=False)
 
 # ========== 加载模型 ==========
 print("Loading model...")
@@ -97,7 +98,7 @@ def visualize_comparison(sample, prediction_text, output_path):
         return
 
     # 读取图像
-    img_path = f"{DATAROOT}/{sample['images'][0]}"
+    img_path = f"{IMAGE_ROOT}{sample['images'][0]}"
     img = cv2.imread(img_path)
     if img is None:
         print(f"Failed to load image: {img_path}")
@@ -177,7 +178,7 @@ for idx in range(NUM_SAMPLES):
     print(f"Processing sample {idx+1}/{NUM_SAMPLES}...")
 
     sample = data[idx]
-    image_path = f"{DATAROOT}/{sample['images'][0]}"
+    image_path = f"{IMAGE_ROOT}{sample['images'][0]}"
     question = sample['messages'][0]['content']
 
     # 推理

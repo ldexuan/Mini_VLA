@@ -1,5 +1,10 @@
 # MyVLA - 视觉-语言-动作自动驾驶轨迹预测
 
+<div align="center">
+  <img src="output_trajectory.gif" alt="Trajectory Prediction Demo" width="800"/>
+  <p><i>预测轨迹（蓝色）vs 真实轨迹（绿色）</i></p>
+</div>
+
 基于 Qwen2-VL 的端到端自动驾驶轨迹预测系统，使用 nuScenes 数据集训练。
 
 ## 环境配置
